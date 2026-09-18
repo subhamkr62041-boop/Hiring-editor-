@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor Applications — Admin</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0b'/%3E%3Cpath d='M12 9l12 7-12 7z' fill='%23ffb454'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0a0a0b; --bg2:#0e0e10; --card:rgba(255,255,255,.028); --line:rgba(255,255,255,.085); --line2:rgba(255,255,255,.16);
+  --ink:#f4f2ee; --mut:#8a8a92; --dim:#5c5c64; --acc:#ffb454; --acc2:#ffd9a0; --accsoft:rgba(255,180,84,.14);
+  --err:#ff7a6e; --ok:#5ddba4;
+  --disp:'Space Grotesk',sans-serif; --body:'Inter',system-ui,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{width:min(1180px,93vw);margin:0 auto}
+h1{font-family:var(--disp);text-transform:uppercase;letter-spacing:-.01em}
+label{display:block;font-family:var(--disp);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin-bottom:.5rem}
+input,select{width:100%;background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:.8rem .95rem;font-family:var(--body);font-size:.95rem;outline:none;transition:.2s;-webkit-appearance:none;appearance:none}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a8a92' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center}
+input:focus,select:focus{border-color:rgba(255,180,84,.55)}
+::placeholder{color:#4d4d55}
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--disp);font-weight:600;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;color:#0a0a0b;background:var(--acc);padding:.85rem 1.5rem;border-radius:10px;border:none;cursor:pointer;transition:.25s}
+.btn:hover{background:var(--acc2)}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.btn.line{background:transparent;color:var(--mut);border:1px solid var(--line)}
+.btn.line:hover{color:var(--ink);background:rgba(255,255,255,.03)}
+
+/* gate */
+.gate{min-height:100svh;display:grid;place-items:center;padding:2rem 0}
+.gatebox{width:min(400px,92vw);text-align:center}
+.gatebox .lock{width:56px;height:56px;border-radius:14px;border:1px solid var(--line2);display:grid;place-items:center;margin:0 auto 1.4rem}
+.gatebox h1{font-size:1.5rem;margin-bottom:.5rem}
+.gatebox p{color:var(--mut);font-size:.9rem;margin-bottom:1.8rem}
+.gatebox .field{text-align:left;margin-bottom:1.1rem}
+.err{color:var(--err);font-size:.82rem;margin-top:.7rem;display:none}
+.err.on{display:block}
+
+/* header */
+header{border-bottom:1px solid var(--line);background:rgba(10,10,11,.8);backdrop-filter:blur(12px);position:sticky;top:0;z-index:40}
+.hin{width:min(1180px,93vw);margin:0 auto;display:flex;justify-content:space-between;align-items:center;height:64px;gap:1rem}
+.brand{font-family:var(--disp);font-weight:600;letter-spacing:.14em;font-size:.78rem;text-transform:uppercase;display:flex;align-items:center;gap:.6rem;white-space:nowrap}
+.brand .dot{width:7px;height:7px;border-radius:2px;background:var(--acc);box-shadow:0 0 12px rgba(255,180,84,.8)}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:1.6rem 0}
+@media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem}
+.stat b{display:block;font-family:var(--disp);font-size:1.55rem;font-weight:600}
+.stat span{font-family:var(--disp);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.stat.new b{color:var(--acc)} .stat.sel b{color:var(--ok)}
+
+/* filters */
+.filters{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:.8rem;margin-bottom:1.6rem}
+@media(max-width:760px){.filters{grid-template-columns:1fr 1fr}.filters .search{grid-column:1/-1}}
+
+/* application cards */
+.app{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:1.3rem 1.4rem;margin-bottom:.9rem;transition:.2s}
+.app.open{border-color:var(--line2)}
+.apphead{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;cursor:pointer}
+.apphead .who{min-width:0}
+.apphead .nm{font-family:var(--disp);font-weight:600;font-size:1.08rem;display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+.chip{font-family:var(--disp);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;padding:.28rem .6rem;border-radius:99px;border:1px solid;white-space:nowrap}
+.chip.New{color:var(--acc);border-color:rgba(255,180,84,.45);background:var(--accsoft)}
+.chip.Shortlisted{color:#8ab8ff;border-color:rgba(138,184,255,.45);background:rgba(138,184,255,.1)}
+.chip.Interview{color:#c79bff;border-color:rgba(199,155,255,.45);background:rgba(199,155,255,.1)}
+.chip.Selected{color:var(--ok);border-color:rgba(93,219,164,.45);background:rgba(93,219,164,.1)}
+.chip.Rejected{color:var(--err);border-color:rgba(255,122,110,.45);background:rgba(255,122,110,.1)}
+.apphead .meta{color:var(--dim);font-size:.8rem;margin-top:.25rem}
+.apphead .side{text-align:right;flex:none}
+.gone{opacity:.5}
+@media(max-width:560px){.apphead{flex-direction:column}.apphead .side{text-align:left}}
+
+.appbody{display:none;margin-top:1.2rem;border-top:1px solid var(--line);padding-top:1.2rem}
+.app.open .appbody{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.4rem 2rem}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.kv{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-bottom:1px solid var(--line);font-size:.9rem}
+.kv .k{font-family:var(--disp);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);flex:none;padding-top:.2rem}
+.kv .v{text-align:right;word-break:break-word;color:#d8d7d2}
+.kv .v a{color:var(--acc);text-decoration:none}
+.kv .v a:hover{text-decoration:underline}
+.full{color:#c9c8c3;font-size:.92rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.full .k{font-family:var(--disp);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);display:block;margin-bottom:.25rem}
+
+.rowbtns{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1.1rem;align-items:center}
+.mini{font-family:var(--disp);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;padding:.5rem .85rem;border-radius:99px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--mut);transition:.2s;white-space:nowrap}
+.mini:hover{color:var(--ink);border-color:var(--line2)}
+.mini.acc{color:var(--acc);border-color:rgba(255,180,84,.4)}
+.mini.acc:hover{background:var(--accsoft)}
+.fileline{display:flex;align-items:center;gap:.7rem;padding:.5rem 0}
+.fileline .fn{flex:1;min-width:0;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fileline .fs{color:var(--dim);font-size:.75rem;flex:none}
+.statussel{display:flex;align-items:center;gap:.6rem;margin-left:auto}
+.statussel select{width:auto;padding:.5rem 2.2rem .5rem .9rem;font-size:.8rem;font-family:var(--disp)}
+.statussel label{margin:0}
+
+.state{text-align:center;padding:5rem 1rem;color:var(--dim)}
+.state .big{font-family:var(--disp);letter-spacing:.1em;text-transform:uppercase;font-size:.95rem;margin-bottom:.4rem;color:var(--mut)}
+.spin{width:26px;height:26px;border:2px solid var(--line2);border-top-color:var(--acc);border-radius:50%;margin:0 auto 1.2rem;animation:rot .8s linear infinite}
+@keyframes rot{to{transform:rotate(360deg)}}
+.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:24px;background:#161618;border:1px solid var(--line2);color:var(--ink);padding:.8rem 1.2rem;border-radius:12px;font-size:.86rem;z-index:99;opacity:0;pointer-events:none;transition:.3s;max-width:90vw}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:rgba(93,219,164,.5)}
+.toast.err{border-color:rgba(255,122,110,.5)}
+h2.sec{font-family:var(--disp);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);margin:1.4rem 0 .2rem}
+</style>
+</head>
+<body>
+
+<!-- ═══ GATE ═══ -->
+<div class="gate" id="gate">
+  <div class="gatebox">
+    <div class="lock"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="5" y="10.5" width="14" height="9" rx="2.5" stroke="#ffb454" stroke-width="1.5"/><path d="M8 10.5V7.5a4 4 0 018 0v3" stroke="#ffb454" stroke-width="1.5"/></svg></div>
+    <h1>Admin Access</h1>
+    <p>Enter your admin key to view applications.</p>
+    <div class="field"><label>Admin Key</label><input type="password" id="keyInput" placeholder="Your admin key" autocomplete="off"></div>
+    <button class="btn" id="keyGo" style="width:100%;justify-content:center">Unlock →</button>
+    <p class="err" id="gateErr">Invalid key. Please try again.</p>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="dash" style="display:none">
+  <header>
+    <div class="hin">
+      <div class="brand"><span class="dot"></span>Editor Applications — Admin</div>
+      <div style="display:flex;gap:.6rem">
+        <button class="btn line" id="refresh">Refresh</button>
+        <button class="btn line" id="logout">Lock</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding:1.6rem 0 5rem">
+    <div class="stats" id="stats"></div>
+
+    <div class="filters">
+      <div class="search"><label>Search</label><input type="text" id="q" placeholder="Name, email, city, Instagram, ref…"></div>
+      <div><label>Status</label><select id="fStatus"><option value="">All statuses</option><option>New</option><option>Shortlisted</option><option>Interview</option><option>Selected</option><option>Rejected</option></select></div>
+      <div><label>Experience</label><select id="fExp"><option value="">All levels</option><option>Beginner</option><option>1-2 Years</option><option>2-3 Years</option><option>3+ Years</option></select></div>
+      <div><label>Software</label><select id="fSoft"><option value="">All software</option><option>Adobe Premiere Pro</option><option>After Effects</option><option>DaVinci Resolve</option><option>CapCut</option><option>Final Cut Pro</option><option>Other</option></select></div>
+    </div>
+
+    <div class="state" id="state"><div class="spin"></div><p class="big">Loading applications</p></div>
+    <div id="list"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = 'https://solene-06389a08.base44.app/functions/editorAdmin';
+const KEY_LS = 've_admin_key';
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+let APPS = [], FILES = [];
+let adminKey = localStorage.getItem(KEY_LS) || '';
+
+let toastT;
+function toast(msg, kind) {
+  const t = $('#toast'); t.textContent = msg;
+  t.className = 'toast on' + (kind ? ' ' + kind : '');
+  clearTimeout(toastT); toastT = setTimeout(() => t.className = 'toast', 3200);
+}
+function esc(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function fmtSize(b) { if (!b) return ''; if (b > 1048576) return (b / 1048576).toFixed(1) + ' MB'; return Math.max(1, Math.round(b / 1024)) + ' KB'; }
+function dt(iso) { if (!iso) return ''; const d = new Date(iso); return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + ' · ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }); }
+
+async function call(body) {
+  const res = await fetch(API, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ adminKey, ...body })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.success) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+/* ————— gate ————— */
+function tryKey() {
+  adminKey = $('#keyInput').value.trim();
+  if (!adminKey) return;
+  $('#keyGo').disabled = true;
+  call({ action: 'list' }).then(d => {
+    localStorage.setItem(KEY_LS, adminKey);
+    $('#gate').style.display = 'none';
+    $('#dash').style.display = 'block';
+    APPS = d.applications || []; FILES = d.files || [];
+    render();
+  }).catch(() => {
+    $('#gateErr').classList.add('on');
+  }).finally(() => $('#keyGo').disabled = false);
+}
+$('#keyGo').addEventListener('click', tryKey);
+$('#keyInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryKey(); });
+$('#logout').addEventListener('click', () => { localStorage.removeItem(KEY_LS); location.reload(); });
+
+if (adminKey) {
+  call({ action: 'list' }).then(d => {
+    $('#gate').style.display = 'none';
+    $('#dash').style.display = 'block';
+    APPS = d.applications || []; FILES = d.files || [];
+    render();
+  }).catch(() => { localStorage.removeItem(KEY_LS); adminKey = ''; });
+}
+
+/* ————— refresh ————— */
+$('#refresh').addEventListener('click', async () => {
+  const b = $('#refresh'); b.disabled = true;
+  try {
+    const d = await call({ action: 'list' });
+    APPS = d.applications || []; FILES = d.files || [];
+    render(); toast('Applications refreshed', 'ok');
+  } catch (e) { toast(e.message, 'err'); }
+  b.disabled = false;
+});
+
+/* ————— filters ————— */
+['q', 'fStatus', 'fExp', 'fSoft'].forEach(id => $('#' + id).addEventListener('input', render));
+
+function filtered() {
+  const q = $('#q').value.trim().toLowerCase();
+  const st = $('#fStatus').value, ex = $('#fExp').value, sw = $('#fSoft').value;
+  return APPS.filter(a => {
+    if (st && a.status !== st) return false;
+    if (ex && a.experienceLevel !== ex) return false;
+    if (sw && !(a.software || []).includes(sw)) return false;
+    if (q) {
+      const hay = [a.name, a.email, a.city, a.instagram, a.referenceId, a.whatsapp].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  }).sort((a, b) => new Date(b.created_date) - new Date(a.created_date));
+}
+
+/* ————— render ————— */
+function render() {
+  const list = filtered();
+  /* stats */
+  const counts = { total: APPS.length, New: 0, Shortlisted: 0, Interview: 0, Selected: 0, Rejected: 0 };
+  APPS.forEach(a => counts[a.status] = (counts[a.status] || 0) + 1);
+  $('#stats').innerHTML = `
+    <div class="stat"><b>${counts.total}</b><span>Total</span></div>
+    <div class="stat new"><b>${counts.New}</b><span>New</span></div>
+    <div class="stat"><b>${counts.Shortlisted}</b><span>Shortlisted</span></div>
+    <div class="stat sel"><b>${counts.Selected}</b><span>Selected</span></div>
+    <div class="stat"><b>${FILES.length}</b><span>Files</span></div>`;
+
+  const st = $('#state'), lb = $('#list');
+  if (!APPS.length) {
+    st.style.display = 'block'; lb.innerHTML = '';
+    st.innerHTML = `<p class="big">No applications yet</p><p>Share your hiring link — applications will appear here.</p>`;
+    return;
+  }
+  if (!list.length) {
+    st.style.display = 'block'; lb.innerHTML = '';
+    st.innerHTML = `<p class="big">No matches</p><p>No applications match your search or filters.</p>`;
+    return;
+  }
+  st.style.display = 'none';
+  lb.innerHTML = list.map((a, i) => {
+    const links = (a.portfolioLinks || []).map(l => `<a href="${esc(l.replace(/^\[[^\]]+\]\s*/, ''))}" target="_blank" rel="noopener">${esc(l)}</a>`).join('<br>') || '—';
+    const fnames = (a.portfolioFiles || []);
+    const fileHtml = fnames.length ? fnames.map(n => `
+      <div class="fileline"><span class="fn">${esc(n)}</span><span class="fs">sent to email</span></div>`).join('')
+      : '<p class="v" style="color:var(--dim);font-size:.86rem">No files</p>';
+    return `
+    <article class="app gone ${a.status === 'Rejected' ? 'rej' : ''}" data-app="${a.id}">
+      <div class="apphead" data-toggle="${a.id}">
+        <div class="who">
+          <div class="nm">${esc(a.name)} <span class="chip ${esc(a.status)}">${esc(a.status)}</span></div>
+          <div class="meta">${esc(a.referenceId || '')} &nbsp;·&nbsp; ${dt(a.created_date)}${a.city ? ' &nbsp;·&nbsp; ' + esc(a.city) : ''}${a.experienceLevel ? ' &nbsp;·&nbsp; ' + esc(a.experienceLevel) : ''}</div>
+        </div>
+        <div class="side" style="color:var(--dim);font-size:.8rem">${(a.software || []).length ? (a.software || []).slice(0, 2).join(', ') + ((a.software || []).length > 2 ? ' +' : '') : ''}</div>
+      </div>
+      <div class="appbody">
+        <h2 class="sec">Contact</h2>
+        <div class="grid2">
+          ${a.email ? `<div class="kv"><span class="k">Email</span><span class="v">${esc(a.email)} <button class="mini" data-copy="${esc(a.email)}">Copy</button></span></div>` : ''}
+          <div class="kv"><span class="k">Mobile / WhatsApp</span><span class="v">${esc(a.whatsapp || '—')} <button class="mini" data-copy="${esc(a.whatsapp || '')}">Copy</button></span></div>
+          ${a.instagram ? `<div class="kv"><span class="k">Link</span><span class="v"><a href="${esc(a.instagram.startsWith('http') ? a.instagram : 'https://' + a.instagram)}" target="_blank" rel="noopener">${esc(a.instagram)}</a></span></div>` : ''}
+          ${a.city || a.age ? `<div class="kv"><span class="k">City / Age</span><span class="v">${esc(a.city || '—')}${a.age ? ' · ' + esc(a.age) : ''}</span></div>` : ''}
+          ${a.currentRole ? `<div class="kv"><span class="k">Currently</span><span class="v">${esc(a.currentRole)}</span></div>` : ''}
+          <div class="kv"><span class="k">Copy all contact</span><span class="v"><button class="mini acc" data-copyall="${esc(a.name)}|${esc(a.email || '')}|${esc(a.whatsapp || '')}|${esc(a.instagram || '')}|${esc(a.city || '')}">Copy contact info</button></span></div>
+        </div>
+        ${a.experienceLevel || (a.software || []).length || a.availability ? `<h2 class="sec">Experience</h2>
+        <div class="grid2">
+          <div class="kv"><span class="k">Editing for</span><span class="v">${esc(a.experienceLevel || '—')}</span></div>
+          <div class="kv"><span class="k">Software</span><span class="v">${(a.software || []).join(', ') || '—'}</span></div>
+          <div class="kv"><span class="k">Content types</span><span class="v">${(a.contentTypes || []).join(', ') || '—'}</span></div>
+          <div class="kv"><span class="k">Availability</span><span class="v">${esc(a.availability || '—')}</span></div>
+          <div class="kv"><span class="k">Compensation</span><span class="v">${esc(a.compensation || '—')}</span></div>
+          <div class="kv"><span class="k">Can start</span><span class="v">${esc(a.startAvailability || '—')}</span></div>
+        </div>` : ''}
+        <h2 class="sec">Portfolio</h2>
+        ${(a.portfolioLinks || []).length ? `<div class="kv"><span class="k">Links</span><span class="v">${links}</span></div>` : ''}
+        <div class="kv"><span class="k">Files</span><span class="v">${fileHtml}</span></div>
+        ${a.bestProjectStory ? `<div class="full"><span class="k">Best project</span>${esc(a.bestProjectStory)}</div>` : ''}
+        ${a.styleAnswer ? `<div class="full"><span class="k">Style</span>${esc(a.styleAnswer)}</div>` : ''}
+        ${a.whyUs ? `<div class="full"><span class="k">Why us</span>${esc(a.whyUs)}</div>` : ''}
+        <div class="rowbtns">
+          <div class="statussel">
+            <label style="margin:0">Status</label>
+            <select data-status="${a.id}">
+              ${['New', 'Shortlisted', 'Interview', 'Selected', 'Rejected'].map(s => `<option ${s === a.status ? 'selected' : ''}>${s}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+      </div>
+    </article>`;
+  }).join('');
+
+  /* wire events */
+  $$('.apphead').forEach(h => h.addEventListener('click', () => {
+    const card = h.closest('.app');
+    card.classList.toggle('open');
+    card.classList.toggle('gone', !card.classList.contains('open'));
+  }));
+  $$('[data-copy]').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); copy(b.dataset.copy, 'Copied to clipboard'); }));
+  $$('[data-copyall]').forEach(b => b.addEventListener('click', async e => {
+    e.stopPropagation();
+    const [n, em, wa, ig, ci] = b.dataset.copyall.split('|');
+    await copy(`Name: ${n}\nEmail: ${em}\nWhatsApp: ${wa}\nInstagram: ${ig}\nCity: ${ci}`, 'Full contact info copied');
+  }));
+  $$('[data-status]').forEach(sel => sel.addEventListener('change', async e => {
+    const id = sel.dataset.status, status = sel.value;
+    try {
+      await call({ action: 'status', id, status });
+      const a = APPS.find(x => x.id === id); if (a) a.status = status;
+      toast(`Marked as ${status}`, 'ok'); render();
+    } catch (err) { toast(err.message, 'err'); }
+  }));
+  $$('[data-dl]').forEach(b => b.addEventListener('click', async e => {
+    e.stopPropagation();
+    const btn = b; btn.disabled = true; btn.textContent = 'Fetching…';
+    try {
+      const d = await call({ action: 'file', applicationId: b.dataset.dl, filename: b.dataset.fn });
+      const bytes = Uint8Array.from(atob(d.dataBase64), c => c.charCodeAt(0));
+      const blob = new Blob([bytes], { type: d.mimeType || 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = d.filename || b.dataset.fn || 'file';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      btn.textContent = 'Download';
+    } catch (err) { btn.textContent = 'Download'; toast('Download failed — ' + err.message, 'err'); }
+    btn.disabled = false;
+  }));
+}
+
+async function copy(text, msg) {
+  try { await navigator.clipboard.writeText(text); toast(msg, 'ok'); }
+  catch (e) {
+    const ta = document.createElement('textarea'); ta.value = text;
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove(); toast(msg, 'ok');
+  }
+}
+</script>
+</body>
+</html>

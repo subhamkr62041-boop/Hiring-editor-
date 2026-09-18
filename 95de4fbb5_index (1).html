@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We're Hiring — Video Editor | Quick Apply</title>
+<meta name="description" content="We're hiring a video editor. Upload your best demo work — 30-second quick apply. Get paid to edit.">
+<meta property="og:title" content="We're Hiring — Video Editor">
+<meta property="og:description" content="Upload your best demo work. 30-second quick apply.">
+<meta name="robots" content="index">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23a78bfa'/><text x='50' y='70' font-size='55' font-family='monospace' font-weight='bold' text-anchor='middle' fill='%230a0a0b'>VE</text></svg>">
+<style>
+  :root {
+    --bg: #0a0a0b; --bg2: #101013; --card: #141418; --line: rgba(255,255,255,.08);
+    --txt: #f4f4f5; --dim: #9ca3af; --acc: #a78bfa; --acc2: #7c3aed;
+    --ok: #34d399; --err: #f87171; --mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, 'Inter', sans-serif;
+    background: var(--bg); color: var(--txt); min-height: 100vh;
+    overflow-x: hidden;
+    background-image: radial-gradient(ellipse 60% 40% at 70% -10%, rgba(124,58,237,.16), transparent);
+  }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 22px; position: sticky; top: 0; z-index: 10;
+    background: rgba(10,10,11,.82); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .logo { font-family: var(--mono); font-weight: 700; font-size: 1.1rem; letter-spacing: .02em; }
+  .logo span { color: var(--acc); }
+  .navbtn {
+    font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    background: var(--acc); color: #0a0a0b; border: none; padding: 10px 18px; border-radius: 999px;
+    cursor: pointer; text-decoration: none; font-family: inherit;
+  }
+
+  header { padding: 72px 0 44px; text-align: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--acc); border: 1px solid rgba(167,139,250,.35); border-radius: 999px;
+    padding: 7px 14px; margin-bottom: 26px;
+  }
+  .pulse {
+    width: 7px; height: 7px; border-radius: 50%; background: var(--acc);
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .25; } }
+  h1 {
+    font-size: clamp(2.6rem, 9vw, 4.6rem); font-weight: 800; line-height: .98;
+    letter-spacing: -.03em; text-transform: uppercase;
+  }
+  h1 .stroke { color: transparent; -webkit-text-stroke: 1.5px var(--txt); }
+  .sub { color: var(--dim); font-size: 1.02rem; line-height: 1.65; margin: 22px auto 0; max-width: 480px; }
+  .sub b { color: var(--txt); }
+
+  .strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 26px 0; margin: 8px 0 0; }
+  .strip-grid { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .chip {
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--dim); border: 1px solid var(--line); border-radius: 999px; padding: 8px 16px;
+  }
+  .chip b { color: var(--acc); font-weight: 700; }
+
+  section.apply { padding: 56px 0 30px; }
+  .sec-label {
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--acc); text-align: center; margin-bottom: 8px;
+  }
+  h2 { font-size: 1.7rem; font-weight: 800; text-align: center; letter-spacing: -.02em; }
+  .sub2 { text-align: center; color: var(--dim); font-size: .92rem; margin: 10px 0 30px; }
+
+  .formcard {
+    background: var(--card); border: 1px solid var(--line); border-radius: 20px;
+    padding: 26px 24px; max-width: 560px; margin: 0 auto;
+  }
+  .flabel {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: .76rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--txt); margin: 18px 0 8px;
+  }
+  .flabel:first-child { margin-top: 0; }
+  .opt { color: var(--dim); font-weight: 400; font-size: .68rem; letter-spacing: .06em; }
+  .req { color: var(--acc); }
+  input[type=text], input[type=tel] {
+    width: 100%; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px;
+    color: var(--txt); font-size: 1rem; padding: 13px 15px; outline: none;
+    transition: border-color .2s; font-family: inherit;
+  }
+  input:focus { border-color: var(--acc); }
+  input::placeholder { color: #52525b; }
+
+  .dropzone {
+    border: 1.5px dashed rgba(167,139,250,.45); border-radius: 14px; background: var(--bg2);
+    padding: 26px 16px; text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
+  }
+  .dropzone:hover, .dropzone.drag { border-color: var(--acc); background: rgba(124,58,237,.08); }
+  .dz-icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .dz-t { font-size: .92rem; font-weight: 600; }
+  .dz-s { font-family: var(--mono); font-size: .64rem; color: var(--dim); margin-top: 7px; letter-spacing: .05em; line-height: 1.7; }
+  .filelist { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+  .fitem {
+    display: flex; align-items: center; gap: 10px; background: var(--bg2); border: 1px solid var(--line);
+    border-radius: 10px; padding: 10px 12px; font-size: .84rem;
+  }
+  .fitem .fn { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fitem .fs { font-family: var(--mono); font-size: .66rem; color: var(--dim); }
+  .fitem button { background: none; border: none; color: var(--err); cursor: pointer; font-size: 1rem; padding: 0 4px; }
+
+  .hp { position: absolute; left: -9999px; opacity: 0; height: 0; }
+
+  .submit {
+    width: 100%; margin-top: 24px; background: linear-gradient(135deg, var(--acc2), var(--acc));
+    color: #fff; border: none; border-radius: 12px; padding: 16px; font-size: .95rem;
+    font-weight: 800; letter-spacing: .12em; text-transform: uppercase; cursor: pointer;
+    font-family: inherit; transition: transform .15s, box-shadow .2s; display: flex;
+    align-items: center; justify-content: center; gap: 8px;
+  }
+  .submit:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(124,58,237,.35); }
+  .submit:disabled { opacity: .55; cursor: wait; transform: none; }
+  .bar {
+    height: 4px; background: var(--bg2); border-radius: 999px; margin-top: 14px;
+    overflow: hidden; display: none;
+  }
+  .bar.on { display: block; }
+  .bar > div {
+    height: 100%; width: 0%; background: linear-gradient(90deg, var(--acc2), var(--acc));
+    border-radius: 999px; transition: width .25s;
+  }
+  .ptext { font-family: var(--mono); font-size: .68rem; color: var(--dim); text-align: center; margin-top: 8px; display: none; }
+  .ptext.on { display: block; }
+
+  .success {
+    display: none; text-align: center; padding: 30px 22px; max-width: 560px; margin: 0 auto;
+    background: var(--card); border: 1px solid rgba(52,211,153,.3); border-radius: 20px;
+  }
+  .success.on { display: block; }
+  .success .tick {
+    width: 64px; height: 64px; border-radius: 50%; background: rgba(52,211,153,.12);
+    display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;
+    font-size: 1.8rem; color: var(--ok);
+  }
+  .success h3 { font-size: 1.3rem; margin-bottom: 10px; }
+  .success p { color: var(--dim); font-size: .92rem; line-height: 1.65; }
+
+  footer { text-align: center; padding: 40px 0 30px; color: #52525b; font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; }
+
+  .toast {
+    position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(90px);
+    background: #1c1c21; border: 1px solid var(--line); border-radius: 12px; padding: 13px 20px;
+    font-size: .86rem; max-width: 90%; z-index: 99; transition: transform .3s; box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  }
+  .toast.on { transform: translateX(-50%) translateY(0); }
+  .toast.err { border-color: rgba(248,113,113,.5); }
+
+  @media (max-width: 520px) {
+    header { padding: 52px 0 36px; }
+    .formcard { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">VIDEO<span>EDITOR</span>.</div>
+  <a class="navbtn" href="#apply">Apply Now</a>
+</nav>
+
+<div class="wrap">
+  <header>
+    <div class="badge"><span class="pulse"></span>Now Hiring — Video Editor</div>
+    <h1>Get Paid<br><span class="stroke">To Edit.</span></h1>
+    <p class="sub">We work with creators and brands. If your edits speak for themselves, <b>show us your demo</b> — upload below. Takes 30 seconds.</p>
+  </header>
+</div>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="strip-grid">
+      <div class="chip"><b>01</b>&nbsp; Reels · Shorts · YouTube</div>
+      <div class="chip"><b>02</b>&nbsp; Premiere / AE / CapCut / VN</div>
+      <div class="chip"><b>03</b>&nbsp; Per-Project Pay</div>
+      <div class="chip"><b>04</b>&nbsp; Fully Remote</div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <section class="apply" id="apply">
+    <div class="sec-label">Quick Apply — 30 Seconds</div>
+    <h2>Show Us Your Work</h2>
+    <p class="sub2">Name, number, demo. That's it. No long forms.</p>
+
+    <div class="formcard" id="formcard">
+      <div class="flabel"><span>Full Name</span><span class="req">*</span></div>
+      <input type="text" id="name" placeholder="Your name" autocomplete="name">
+
+      <div class="flabel"><span>WhatsApp / Mobile No.</span><span class="req">*</span></div>
+      <input type="tel" id="mobile" placeholder="+91 98XXXXXXXX" autocomplete="tel">
+
+      <div class="flabel"><span>Your Link</span><span class="opt">Instagram / YouTube / Drive — optional</span></div>
+      <input type="text" id="link" placeholder="instagram.com/you or drive link">
+
+      <div class="flabel"><span>Upload Demo Work</span><span class="req">*</span></div>
+      <div class="dropzone" id="dz">
+        <div class="dz-icon">🎬</div>
+        <div class="dz-t">Tap to upload your best edits</div>
+        <div class="dz-s">MP4 · MOV · WEBM · JPG · PNG · PDF<br>up to 15 MB total · 3–5 edits recommended</div>
+        <input type="file" id="files" multiple hidden
+          accept="video/mp4,video/quicktime,video/webm,image/jpeg,image/png,application/pdf">
+      </div>
+      <div class="filelist" id="flist"></div>
+
+      <input type="text" class="hp" id="hp" tabindex="-1" autocomplete="off">
+
+      <button class="submit" id="submit">Submit Application ↗</button>
+      <div class="bar" id="bar"><div id="barfill"></div></div>
+      <div class="ptext" id="ptext"></div>
+    </div>
+
+    <div class="success" id="success">
+      <div class="tick">✓</div>
+      <h3>Application Received</h3>
+      <p>Your demo has been sent to our team. If your work fits what we're building, we'll contact you on WhatsApp within 48 hours.<br>Keep creating.</p>
+    </div>
+  </section>
+
+  <footer>Video Editor Recruitment — 2026</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  var API = 'https://solene-06389a08.base44.app/functions/submitEditorApplication';
+  var STARTED = Date.now();
+  var files = [];
+  var MAX_TOTAL = 15 * 1024 * 1024;
+  var ALLOWED = ['video/mp4', 'video/quicktime', 'video/webm', 'image/jpeg', 'image/png', 'application/pdf'];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var dz = $('dz'), flist = $('flist'), input = $('files');
+
+  function toast(msg, err) {
+    var t = $('toast');
+    t.textContent = msg;
+    t.className = 'toast on' + (err ? ' err' : '');
+    clearTimeout(t._h);
+    t._h = setTimeout(function () { t.className = 'toast'; }, 4200);
+  }
+
+  function fmtSize(b) {
+    if (b > 1024 * 1024) return (b / 1048576).toFixed(1) + ' MB';
+    return Math.max(1, Math.round(b / 1024)) + ' KB';
+  }
+
+  function totalSize() {
+    return files.reduce(function (s, f) { return s + f.size; }, 0);
+  }
+
+  function renderFiles() {
+    flist.innerHTML = '';
+    files.forEach(function (f, i) {
+      var d = document.createElement('div');
+      d.className = 'fitem';
+      d.innerHTML = '<span class="fn"></span><span class="fs">' + fmtSize(f.size) + '</span><button type="button" aria-label="Remove">×</button>';
+      d.querySelector('.fn').textContent = f.name;
+      d.querySelector('button').onclick = function () { files.splice(i, 1); renderFiles(); };
+      flist.appendChild(d);
+    });
+  }
+
+  function addFiles(list) {
+    var added = 0;
+    for (var i = 0; i < list.length; i++) {
+      var f = list[i];
+      if (ALLOWED.indexOf(f.type) === -1) {
+        toast('"' + f.name + '" type not supported. Use MP4, MOV, WEBM, JPG, PNG or PDF.', true);
+        continue;
+      }
+      if (totalSize() + f.size > MAX_TOTAL) {
+        toast('Total limit is 15 MB. Remove a file or share bigger demos via Drive link.', true);
+        break;
+      }
+      files.push(f);
+      added++;
+    }
+    renderFiles();
+    if (added > 0) toast(added + ' file' + (added > 1 ? 's' : '') + ' ready');
+  }
+
+  dz.addEventListener('click', function () { input.click(); });
+  input.addEventListener('change', function () { addFiles(input.files); input.value = ''; });
+
+  ['dragover', 'dragleave', 'drop'].forEach(function (ev) {
+    dz.addEventListener(ev, function (e) {
+      e.preventDefault();
+      dz.className = 'dropzone' + (ev === 'dragover' ? ' drag' : '');
+      if (ev === 'drop') addFiles(e.dataTransfer.files);
+    });
+  });
+
+  function validate() {
+    var name = $('name').value.trim();
+    var mobile = $('mobile').value.trim();
+    if (name.length < 2) { toast('Please enter your name.', true); return null; }
+    if (!/^[+]?[0-9\s\-()]{7,20}$/.test(mobile)) { toast('Please enter a valid mobile number.', true); return null; }
+    if (files.length === 0) { toast('Please upload at least one demo file.', true); return null; }
+    if ($('hp').value !== '') return null; // honeypot: silently reject bots
+    return { name: name, mobile: mobile };
+  }
+
+  function sendFiles(person) {
+    var btn = $('submit');
+    var bar = $('bar'), fill = $('barfill'), pt = $('ptext');
+    btn.disabled = true; btn.textContent = 'Sending…';
+    bar.className = 'bar on'; pt.className = 'ptext on';
+
+    var readers = files.map(function (f) {
+      return new Promise(function (res, rej) {
+        var r = new FileReader();
+        r.onload = function () { res({ name: f.name, type: f.type, size: f.size, data: r.result.split(',')[1] }); };
+        r.onerror = rej;
+        r.readAsDataURL(f);
+      });
+    });
+
+    Promise.all(readers).then(function (payload) {
+      var body = JSON.stringify({
+        name: person.name,
+        mobile: person.mobile,
+        link: $('link').value.trim(),
+        files: payload,
+        hp: '',
+        startedAt: STARTED
+      });
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', API, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+
+      xhr.upload.onprogress = function (e) {
+        if (e.lengthComputable) {
+          var pct = Math.round((e.loaded / e.total) * 100);
+          fill.style.width = pct + '%';
+          pt.textContent = 'Uploading… ' + pct + '%';
+        }
+      };
+
+      xhr.onload = function () {
+        try {
+          var r = JSON.parse(xhr.responseText);
+          if (r.success) {
+            pt.textContent = 'Done — 100%';
+            fill.style.width = '100%';
+            $('formcard').style.display = 'none';
+            $('success').className = 'success on';
+            window.scrollTo({ top: $('apply').offsetTop - 40, behavior: 'smooth' });
+          } else {
+            fail(r.error || 'Something went wrong. Please try again.');
+          }
+        } catch (e) { fail('Something went wrong. Please try again.'); }
+      };
+      xhr.onerror = function () { fail('Network error. Check your connection and try again.'); };
+      xhr.send(body);
+    }).catch(function () { fail('Could not read your files. Please try again.'); });
+
+    function fail(msg) {
+      btn.disabled = false; btn.textContent = 'Submit Application ↗';
+      bar.className = 'bar'; pt.className = 'ptext';
+      fill.style.width = '0%';
+      toast(msg, true);
+    }
+  }
+
+  $('submit').addEventListener('click', function () {
+    if (Date.now() - STARTED < 8000) {
+      toast('Take a moment to check your details, then submit.', true);
+      return;
+    }
+    var person = validate();
+    if (person) sendFiles(person);
+  });
+})();
+</script>
+</body>
+</html>
